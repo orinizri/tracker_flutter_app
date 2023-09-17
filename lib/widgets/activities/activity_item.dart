@@ -8,14 +8,6 @@ class ActivityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Column(
-    //   children: [
-    //     Text(activityItem.id),
-    //     Text(activityItem.date.toString()),
-    //     Text(activityItem.sugarLevel.toString()),
-    //     Text(activityItem.description.toString()),
-    //   ],
-    // );
     return Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(

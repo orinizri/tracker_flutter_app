@@ -12,15 +12,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true,),
+      home: const Scaffold(
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
           child: Column(
             children: [
-              NavBar(),
-              Expanded(child: HomePage()),
+              Expanded(
+                child: HomePage(),
+              ),
             ],
           ),
         ),
