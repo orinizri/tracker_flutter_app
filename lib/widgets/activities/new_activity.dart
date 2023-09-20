@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tracker_app/models/activity.dart';
 
 class NewActivity extends StatefulWidget {
-  const NewActivity(this.registeredActivities, {super.key});
+  NewActivity(this.registeredActivities, this.addActivity, {super.key});
   final List<Activity> registeredActivities;
+  void Function(Activity activity) addActivity;
   @override
   State<StatefulWidget> createState() {
     return _NewActivity();
@@ -54,7 +55,7 @@ class _NewActivity extends State<NewActivity> {
       return;
     }
     setState(() {
-      widget.registeredActivities.add(
+      widget.addActivity(
         Activity(
           description: _descriptionController.text.trim(),
           date: _selectedDate!,
@@ -76,7 +77,7 @@ class _NewActivity extends State<NewActivity> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(

@@ -28,9 +28,40 @@ class _ActivitiesView extends State<ActivitiesView> {
     )
   ];
 
+  Widget mainContent = const Center(
+    child: Text('No activities found'),
+  );
+
   void _openActivityOverlay() {
     showModalBottomSheet(
-        context: context, builder: (modalContext) => NewActivity(_registeredActivities));
+        isScrollControlled: true,
+        context: context,
+        builder: (modalContext) =>
+            NewActivity(_registeredActivities, _addActivity));
+  }
+
+  void _addActivity(Activity activity) {
+    setState(() {
+      _registeredActivities.add(activity);
+    });
+  }
+
+  void _removeActivity(Activity activity) {
+    int activityIndex = _registeredActivities.indexOf(activity);
+    setState(() {
+      _registeredActivities.remove(activity);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Activity Deleted'),
+        action: SnackBarAction(label: 'Undo', onPressed: () {
+          setState(() {
+            _registeredActivities.insert(activityIndex, activity);
+          });
+        }),
+      ),
+    );
   }
 
   @override
@@ -47,7 +78,9 @@ class _ActivitiesView extends State<ActivitiesView> {
       ),
       body: Column(children: [
         Expanded(
-          child: ActivitiesList(_registeredActivities),
+          child: _registeredActivities.isNotEmpty
+              ? ActivitiesList(_registeredActivities, _removeActivity)
+              : mainContent,
         ),
       ]),
     );
