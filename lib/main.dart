@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
       home: const Scaffold(
         body: SizedBox(
           width: double.infinity,
-          height: double.infinity,
           child: Column(
             children: [
               Expanded(

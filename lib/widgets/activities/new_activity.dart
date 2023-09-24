@@ -60,7 +60,7 @@ class _NewActivity extends State<NewActivity> {
           description: _descriptionController.text.trim(),
           date: _selectedDate!,
           type: _selectedActivityType,
-          sugarLevel: enteredSugarLevel.toInt(),
+          sugarLevel: enteredSugarLevel,
         ),
       );
     });
@@ -76,80 +76,91 @@ class _NewActivity extends State<NewActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          TextField(
-            maxLength: 50,
-            decoration: const InputDecoration(label: Text('Description')),
-            controller: _descriptionController,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  maxLength: 3,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(label: Text('Sugar Level')),
-                  controller: _sugarLevelController,
+    final keyboardSize = MediaQuery.of(context).viewInsets.bottom;
+    return LayoutBuilder(builder: (ctx, constraints) {
+      // print(constraints.maxHeight);
+      return SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSize + 16),
+            child: Column(
+              children: [
+                TextField(
+                  maxLength: 50,
+                  decoration: const InputDecoration(label: Text('Description')),
+                  controller: _descriptionController,
                 ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Row(
                   children: [
-                    Text(_selectedDate == null
-                        ? 'Select Date'
-                        : formatter.format(_selectedDate!)),
-                    IconButton(
-                      onPressed: _presetDatePicker,
-                      icon: const Icon(Icons.calendar_month),
+                    Expanded(
+                      child: TextField(
+                        maxLength: 3,
+                        keyboardType: TextInputType.number,
+                        decoration:
+                            const InputDecoration(label: Text('Sugar Level')),
+                        controller: _sugarLevelController,
+                      ),
+                    ),
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(_selectedDate == null
+                              ? 'Select Date'
+                              : formatter.format(_selectedDate!)),
+                          IconButton(
+                            onPressed: _presetDatePicker,
+                            icon: const Icon(Icons.calendar_month),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
+                Row(
+                  children: [
+                    DropdownButton(
+                      value: _selectedActivityType,
+                      items: ActivityType.values
+                          .map(
+                            (activityType) => DropdownMenuItem(
+                              value: activityType,
+                              child: Text(
+                                activityType.name.toUpperCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedActivityType = value;
+                        });
+                      },
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: const Text('Save Activity'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          Row(
-            children: [
-              DropdownButton(
-                value: _selectedActivityType,
-                items: ActivityType.values
-                    .map(
-                      (activityType) => DropdownMenuItem(
-                        value: activityType,
-                        child: Text(
-                          activityType.name.toUpperCase(),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) {
-                    return;
-                  }
-                  setState(() {
-                    _selectedActivityType = value;
-                  });
-                },
-              ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Save Activity'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 }

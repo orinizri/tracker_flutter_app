@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 
-final formatter = DateFormat.yMd();
+final formatter = DateFormat('d/MM/y');
 
 enum ActivityType { meal, sugarTest }
 
@@ -23,12 +23,30 @@ class Activity {
 
   final String id;
   final String? description;
-  final int? sugarLevel;
+  final double? sugarLevel;
   final DateTime date;
   final ActivityType type;
 
-
   get formattedDate {
     return DateFormat('yyyy-MM-dd kk:mm').format(date);
+  }
+}
+
+class ActivitiesBucket {
+  ActivitiesBucket({
+    required this.activities,
+  });
+
+  final List<Activity> activities;
+
+  get sugarLevels {
+    double sum = 0;
+
+    for (Activity activity in activities) {
+      if (activity.sugarLevel != null) {
+        sum += activity.sugarLevel!;
+      }
+    }
+    return sum;
   }
 }

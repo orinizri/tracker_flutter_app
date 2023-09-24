@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracker_app/chart.dart';
 import 'package:tracker_app/widgets/activities/activities_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _HomePage extends State<HomePage> {
     return const Column(children: [
       Expanded(
         child: 
-        ActivitiesView(),
+          ActivitiesView(),
       ),
     ]);
   }
